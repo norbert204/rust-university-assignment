@@ -1,0 +1,11 @@
+pub const BORDER_HORIZONTAL: &'static str = "\u{2500}";
+pub const BORDER_VERTICAL: &'static str = "\u{2502}";
+pub const BORDER_TOP_LEFT: &'static str = "\u{256D}";
+pub const BORDER_TOP_RIGHT: &'static str = "\u{256E}";
+pub const BORDER_BOTTOM_LEFT: &'static str = "\u{2570}";
+pub const BORDER_BOTTOM_RIGHT: &'static str = "\u{256F}";
+pub const BORDER_VERTICAL_RIGHT: &'static str = "\u{251C}";
+pub const BORDER_VERTICAL_LEFT: &'static str = "\u{2524}";
+pub const BORDER_HORIZONTAL_BOTTOM: &'static str = "\u{252C}";
+pub const BORDER_HORIZONTAL_TOP: &'static str = "\u{2534}";
+pub const BORDER_CROSS: &'static str = "\u{253C}";

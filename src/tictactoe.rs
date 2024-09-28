@@ -1,6 +1,6 @@
 pub type Grid = [BoardGridCell; 9];
 
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum BoardGridCell {
     None,
     Circle,
@@ -68,4 +68,77 @@ pub fn check_winner(cells: &Grid) -> Option<BoardGridCell> {
     }
 
     None
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn check_winner_circle_row() {
+        for i in (0..9).step_by(3) {
+            // Arrange
+            let mut field = [BoardGridCell::None; 9];
+
+            field[i + 0] = BoardGridCell::Circle;
+            field[i + 1] = BoardGridCell::Circle;
+            field[i + 2] = BoardGridCell::Circle;
+
+            // Act
+            let result = check_winner(&field);
+
+            // Assert
+            assert_eq!(result, Some(BoardGridCell::Circle));
+        }
+    }
+
+    #[test]
+    fn check_winner_circle_column() {
+        for i in 0..3 {
+            // Arrange
+            let mut field = [BoardGridCell::None; 9];
+
+            field[i + 0] = BoardGridCell::Circle;
+            field[i + 3] = BoardGridCell::Circle;
+            field[i + 6] = BoardGridCell::Circle;
+
+            // Act
+            let result = check_winner(&field);
+
+            // Assert
+            assert_eq!(result, Some(BoardGridCell::Circle));
+        }
+    }
+
+    #[test]
+    fn check_winner_circle_diagonal() {
+        // Arrange
+        let mut field = [BoardGridCell::None; 9];
+
+        for i in (0..9).step_by(4) {
+            field[i] = BoardGridCell::Circle;
+        }
+
+        // Act
+        let result = check_winner(&field);
+
+        // Assert
+        assert_eq!(result, Some(BoardGridCell::Circle));
+    }
+
+    #[test]
+    fn check_winner_circle_backward_diagonal() {
+        // Arrange
+        let mut field = [BoardGridCell::None; 9];
+
+        for i in (2..9).step_by(2) {
+            field[i] = BoardGridCell::Circle;
+        }
+
+        // Act
+        let result = check_winner(&field);
+
+        // Assert
+        assert_eq!(result, Some(BoardGridCell::Circle));
+    }
 }

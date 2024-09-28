@@ -1,3 +1,5 @@
+use rand::{self, Rng};
+
 pub type Grid = [BoardGridCell; 9];
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -68,6 +70,19 @@ pub fn check_winner(cells: &Grid) -> Option<BoardGridCell> {
     }
 
     None
+}
+
+pub fn enemy_step(cells: &mut [BoardGridCell; 9]) {
+    let mut rng = rand::thread_rng();
+
+    loop {
+        let index = rng.gen_range(0..cells.len());
+
+        if cells[index] == BoardGridCell::None {
+            cells[index] = BoardGridCell::Cross;
+            break;
+        }
+    }   
 }
 
 #[cfg(test)]

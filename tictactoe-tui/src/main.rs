@@ -1,10 +1,7 @@
+mod chars;
+
 use std::{io::Write, process::exit};
 use tictactoe::{BoardGridCell, Grid};
-
-use rand::Rng;
-
-mod chars;
-mod tictactoe;
 
 fn clear_screen() {
     print!("{}c", 27 as char);
@@ -77,19 +74,6 @@ fn player_step(cells: &mut Grid) -> Result<(), String> {
     Ok(())
 }
 
-fn enemy_step(cells: &mut [BoardGridCell; 9]) {
-    let mut rng = rand::thread_rng();
-
-    loop {
-        let index = rng.gen_range(0..cells.len());
-
-        if cells[index] == BoardGridCell::None {
-            cells[index] = BoardGridCell::Cross;
-            break;
-        }
-    }   
-}
-
 fn win_check(cells: &Grid) {
     let winner = tictactoe::check_winner(&cells);
 
@@ -124,9 +108,11 @@ fn gameplay() {
         clear_screen();
         print_field(&cells);
 
+        println!("Enemy is picking...");
+
         std::thread::sleep(std::time::Duration::from_secs(1));
 
-        enemy_step(&mut cells);
+        tictactoe::enemy_step(&mut cells);
 
         clear_screen();
         print_field(&cells);

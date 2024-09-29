@@ -1,7 +1,8 @@
 mod chars;
 
 use std::{error::Error, io::Write, process::exit};
-use tictactoe::{BoardGridCell, TicTacToe};
+
+use tictactoe::{grid::BoardGridCell, tictactoe::TicTacToe};
 
 fn clear_screen() {
     print!("{}c", 27 as char);
@@ -84,7 +85,7 @@ fn to_board_string(cell: &BoardGridCell, index: usize) -> String {
 }
 
 fn main() {
-    let mut game = tictactoe::TicTacToe::default();
+    let mut game = TicTacToe::default();
 
     loop {
         clear_screen();

@@ -1,7 +1,7 @@
 mod chars;
 
-use std::{io::Write, process::exit};
-use tictactoe::{BoardGridCell, Grid};
+use std::{error::Error, io::Write, process::exit};
+use tictactoe::{BoardGridCell, TicTacToe};
 
 fn clear_screen() {
     print!("{}c", 27 as char);
@@ -35,7 +35,7 @@ fn print_field(cells: &[BoardGridCell; 9]) {
 
         field = field.replace(
             cell_index.to_string().as_str(),
-            cell.to_board_string(cell_index).as_str(),
+            to_board_string(cell, i).as_str(),
         );
     }
 
@@ -43,39 +43,30 @@ fn print_field(cells: &[BoardGridCell; 9]) {
     std::io::stdout().flush().unwrap(); // Needed, otherwise the text won't show up.
 }
 
-fn player_step(cells: &mut Grid) -> Result<(), String> {
+fn player_step(game: &mut TicTacToe) -> Result<(), Box<dyn Error>> {
     print!("\x1b[93mSelect cell [1-9] > \x1b[0m");
     std::io::stdout().flush().unwrap(); // Needed, otherwise the text won't show up.
 
     let mut input = String::new();
-    std::io::stdin().read_line(&mut input).unwrap();
+    std::io::stdin().read_line(&mut input)?;
 
     let input = input.trim();
 
-    let index = input.parse::<usize>();
+    let index = input.parse::<i32>();
 
     if let Err(_) = index {
-        return Err(format!("'{}' is not a number!", input));
+        return Err(format!("'{}' is not a number!", input).into());
     }
 
     let index = index.unwrap();
 
-    if index < 1 || index > cells.len()
-    {
-        return Err(format!("Cell must be between 1 and {}", cells.len()));
-    }
-
-    if cells[index - 1] != BoardGridCell::None {
-        return Err(format!("Cell {} is already occupied!", index));
-    } 
-
-    cells[index - 1] = BoardGridCell::Circle;
+    game.player_step(index - 1)?;
 
     Ok(())
 }
 
-fn win_check(cells: &Grid) {
-    let winner = tictactoe::check_winner(&cells);
+fn win_check(game: &TicTacToe) {
+    let winner = game.check_winner();
 
     if let Some(x) = winner {
         println!("{} wins!", x.to_string());
@@ -83,14 +74,23 @@ fn win_check(cells: &Grid) {
     }
 }
 
-fn gameplay() {
-    let mut cells = [BoardGridCell::None; 9];
+
+fn to_board_string(cell: &BoardGridCell, index: usize) -> String {
+    match cell {
+        BoardGridCell::None => (index + 1).to_string(),
+        BoardGridCell::Cross => "X".to_owned(),
+        BoardGridCell::Circle => "O".to_owned(),
+    }
+}
+
+fn main() {
+    let mut game = tictactoe::TicTacToe::default();
 
     loop {
         clear_screen();
-        print_field(&cells);
+        print_field(&game.cells());
 
-        let result = player_step(&mut cells);
+        let result = player_step(&mut game);
 
         if let Err(e) = result {
             println!("{}", e);
@@ -101,26 +101,22 @@ fn gameplay() {
         }
 
         clear_screen();
-        print_field(&cells);
+        print_field(&game.cells());
 
-        win_check(&cells);
+        win_check(&game);
 
         clear_screen();
-        print_field(&cells);
+        print_field(&game.cells());
 
         println!("Enemy is picking...");
 
         std::thread::sleep(std::time::Duration::from_secs(1));
 
-        tictactoe::enemy_step(&mut cells);
+        game.enemy_step();
 
         clear_screen();
-        print_field(&cells);
+        print_field(&game.cells());
 
-        win_check(&cells);
+        win_check(&game);
     }
-}
-
-fn main() {
-    gameplay();
 }

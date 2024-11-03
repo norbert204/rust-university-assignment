@@ -2,5 +2,6 @@
 resolver = "2"
 members = [
     "tictactoe",
+    "tictactoe-gui",
     "tictactoe-tui"
 ]

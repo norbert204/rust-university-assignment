@@ -1,0 +1,130 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --tile-size: 50px;
+    --background-cross: #f33;
+    --background-circle: #33f;
+    --background: #666;
+    --grid-border-size: 2px;
+}
+
+body {
+    background: #222;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+    color: white;
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    background: var(--background);
+    padding: 20px;
+    border-radius: 10px;
+    transition: ease-in-out .5s background;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+button {
+    border: none;
+    transition: ease-in-out .3s background;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+.replay-button {
+    font-size: 1rem;
+    padding: .5em;
+    border-radius: .3em;
+    background: #bbb;
+}
+
+.replay-button:hover,
+.replay-button:focus-visible {
+    background: #6f6;
+}
+
+.container.circle {
+    background: var(--background-circle);
+}
+
+.container.cross {
+    background: var(--background-cross);
+}
+
+.board {
+    background: black;
+    display: grid;
+    grid-template-columns: repeat(3, var(--tile-size));
+    grid-template-rows: repeat(3, var(--tile-size));
+    gap: var(--grid-border-size);
+    padding: var(--grid-border-size);
+}
+
+.board > button {
+    background: var(--background);
+    border: none;
+}
+
+.board > button:hover,
+.board > button:focus-visible {
+    background: #999;
+}
+
+.board img {
+    width: 100%;
+    height: 100%;
+}
+
+.loading {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border: .2em solid white;
+    animation: linear 1.5s loading infinite;
+    margin-left: .5em;
+}
+
+@keyframes loading {
+    0% {
+        border-radius: 50%;
+        transform: rotateZ(0);
+    }
+
+    50% {
+        border-radius: 0%;
+        transform: rotateZ(45deg);
+    }
+
+    100% {
+        border-radius: 50%;
+        transform: rotateZ(90deg);
+    }
+}
+
+@media (min-width: 500px) {
+    :root {
+        --tile-size: 100px;
+        --grid-border-size: 5px;
+    }
+
+    body {
+        font-size: 24px;
+    }
+}
